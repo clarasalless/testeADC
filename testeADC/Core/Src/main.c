@@ -231,47 +231,32 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : PC13 */
   GPIO_InitStruct.Pin = GPIO_PIN_13;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 
 }
 
 /* USER CODE BEGIN 4 */
-void teste_adc()
+uint32_t teste_adc()
 {
 	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+	status = HAL_ADC_Start(&hadc1);
+	if(status != HAL_OK)
+	{
+		Error_Handler();
+	}
+	status = HAL_ADC_PollForConversion(&hadc1, 100);
 
-	  status = HAL_ADC_Start(&hadc1);
+	if(status != HAL_OK)
+	{
+		Error_Handler();
+	}
+	adc_value = HAL_ADC_GetValue(&hadc1);
 
-	  if(status != HAL_OK)
-	  {
-	  	  Error_Handler();
-	  }
-
-	  status = HAL_ADC_PollForConversion(&hadc1, 100);
-
-	  if(status != HAL_OK)
-	  {
-		  Error_Handler();
-	  }
-
-	  adc_value = HAL_ADC_GetValue(&hadc1);
+	return adc_value;
 }
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(GPIO_Pin);
-  teste_adc();
-  /* NOTE: This function should not be modified, when the callback is needed,
-           the HAL_GPIO_EXTI_Callback could be implemented in the user file
-   */
-}
 /* USER CODE END 4 */
 
 /**
