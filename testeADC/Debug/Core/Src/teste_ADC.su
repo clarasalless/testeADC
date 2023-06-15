@@ -1,0 +1,9 @@
+../Core/Src/teste_ADC.c:4:6:CLKEnable	40	static
+../Core/Src/teste_ADC.c:18:6:buttonInit	40	static
+../Core/Src/teste_ADC.c:36:6:buttonDeInit	16	static
+../Core/Src/teste_ADC.c:40:6:ADC_Init	48	static
+../Core/Src/teste_ADC.c:88:6:ADC_DeInit	16	static
+../Core/Src/teste_ADC.c:93:6:ADC_Calibration	16	static
+../Core/Src/teste_ADC.c:98:19:ADC_Start	16	static
+../Core/Src/teste_ADC.c:103:10:ADC_GetValue	16	static
+../Core/Src/teste_ADC.c:108:6:teste_ADC	16	static
