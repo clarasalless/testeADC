@@ -33,7 +33,8 @@ void buttonInit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
 
-void buttonDeInit(GPIO_TypeDef  *GPIOx, uint32_t GPIO_Pin){
+void buttonDeInit(GPIO_TypeDef  *GPIOx, uint32_t GPIO_Pin)
+{
 	HAL_GPIO_DeInit(GPIOx,GPIO_Pin);
 }
 
