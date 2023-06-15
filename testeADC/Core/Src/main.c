@@ -98,7 +98,13 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_Pin_15)==1 && status==0){
+		  status=1;
+		  adc_value = teste_adc();
+	  }
+	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_Pin_15)==0 && status==1){
+		  status=0;
+	  }
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -252,9 +258,7 @@ uint32_t teste_adc()
 	{
 		Error_Handler();
 	}
-	adc_value = HAL_ADC_GetValue(&hadc1);
-
-	return adc_value;
+	return HAL_ADC_GetValue(&hadc1);
 }
 
 /* USER CODE END 4 */
