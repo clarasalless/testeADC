@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "stm32f3xx_hal.h"
 
+HAL_StatusTypeDef status;
+
 void CLKEnable(GPIO_TypeDef* GPIOx)
 {
 	if(GPIOx == GPIOA)
@@ -101,12 +103,37 @@ HAL_StatusTypeDef ADC_Start(ADC_HandleTypeDef* hadc)
 	return HAL_ADC_Start(hadc);
 }
 
+HAL_StatusTypeDef ADC_PollForConversion(ADC_HandleTypeDef *hadc, uint32_t Timeout)
+{
+	return HAL_ADC_PollForConversion(hadc, Timeout);
+}
+
 uint32_t ADC_GetValue(ADC_HandleTypeDef* hadc)
 {
 	return HAL_ADC_GetValue(hadc);
 }
 
-void teste_ADC(ADC_HandleTypeDef* hadc)
+uint32_t teste_ADC(ADC_HandleTypeDef* hadc)
 {
+	ADC_Calibration(hadc, ADC_SINGLE_ENDED);
+	status = ADC_Start(hadc);
+	uint32_t avrg_value = 0;
+	uint32_t adc_values[10];
+	if (status != HAL_OK)
+	{
+		Error_Handler();
+	}
+
+	status = ADC_PollForConversion(hadc, 100);
+	if (status != HAL_OK)
+	{
+		Error_Handler();
+	}
+	for(int i=0; i<10;i++){
+		adc_values[i] = ADC_GetValue(hadc);
+		avrg_value = avrg_value + adc_values[i];
+	}
+	avrg_value = avrg_value*3300/40950;
+	return avrg_value;
 
 }
