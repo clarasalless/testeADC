@@ -134,6 +134,7 @@ void teste_ADC(ADC_HandleTypeDef* hadc)
 		avrg_value+=adc_values[i];
 	}
 	avrg_value = avrg_value/10;
+	//teste
 	//tensao_media = avrg_value*Vref/4095
 
 }
