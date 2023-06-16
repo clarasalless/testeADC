@@ -43,8 +43,6 @@
 ADC_HandleTypeDef hadc1;
 
 /* USER CODE BEGIN PV */
-uint32_t adc_value;
-HAL_StatusTypeDef status;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -52,8 +50,6 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
-void teste_adc();
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -117,6 +113,7 @@ int main(void)
 		  status=0;
 	  }
     /* USER CODE BEGIN 3 */
+
   /* USER CODE END 3 */
 }
 
@@ -287,6 +284,10 @@ uint32_t teste_adc()
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
+	/* User can add his own implementation to report the HAL error return state */
+	__disable_irq();
+	while (1) {
+	}
   /* USER CODE END Error_Handler_Debug */
 }
 
