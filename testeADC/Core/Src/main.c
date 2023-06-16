@@ -108,13 +108,7 @@ int main(void)
 	  }
   }
     /* USER CODE END WHILE */
-	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_Pin_15)==1 && status==0){
-		  status=1;
-		  adc_value = teste_adc();
-	  }
-	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_Pin_15)==0 && status==1){
-		  status=0;
-	  }
+
     /* USER CODE BEGIN 3 */
 
   /* USER CODE END 3 */
@@ -258,25 +252,6 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-<<<<<<< HEAD
-uint32_t teste_adc()
-{
-	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
-	status = HAL_ADC_Start(&hadc1);
-	if(status != HAL_OK)
-	{
-		Error_Handler();
-	}
-	status = HAL_ADC_PollForConversion(&hadc1, 100);
-
-	if(status != HAL_OK)
-	{
-		Error_Handler();
-	}
-	return HAL_ADC_GetValue(&hadc1);
-}
-=======
->>>>>>> codigoprincipal
 
 /* USER CODE END 4 */
 
