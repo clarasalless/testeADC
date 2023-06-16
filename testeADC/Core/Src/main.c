@@ -1,23 +1,24 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2023 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2023 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "teste_ADC.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -42,8 +43,8 @@
 ADC_HandleTypeDef hadc1;
 
 /* USER CODE BEGIN PV */
-uint32_t adc_value;
-HAL_StatusTypeDef status;
+uint32_t tensao_media;
+int button_status=0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -51,8 +52,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
-void teste_adc();
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -97,6 +97,16 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == 0 && button_status == 0)
+	  {
+		  button_status = 1;
+		  tensao_media = teste_ADC(&hadc1);
+	  }
+	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == 1 && button_status == 1)
+	  {
+		  button_status = 0;
+	  }
+  }
     /* USER CODE END WHILE */
 	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_Pin_15)==1 && status==0){
 		  status=1;
@@ -106,7 +116,7 @@ int main(void)
 		  status=0;
 	  }
     /* USER CODE BEGIN 3 */
-  }
+
   /* USER CODE END 3 */
 }
 
@@ -230,6 +240,8 @@ static void MX_ADC1_Init(void)
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
+/* USER CODE BEGIN MX_GPIO_Init_1 */
+/* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
@@ -241,25 +253,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
+/* USER CODE BEGIN MX_GPIO_Init_2 */
+/* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
-uint32_t teste_adc()
-{
-	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
-	status = HAL_ADC_Start(&hadc1);
-	if(status != HAL_OK)
-	{
-		Error_Handler();
-	}
-	status = HAL_ADC_PollForConversion(&hadc1, 100);
-
-	if(status != HAL_OK)
-	{
-		Error_Handler();
-	}
-	return HAL_ADC_GetValue(&hadc1);
-}
 
 /* USER CODE END 4 */
 
@@ -270,11 +268,10 @@ uint32_t teste_adc()
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+	/* User can add his own implementation to report the HAL error return state */
+	__disable_irq();
+	while (1) {
+	}
   /* USER CODE END Error_Handler_Debug */
 }
 
