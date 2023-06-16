@@ -1,20 +1,20 @@
 /**
-  ******************************************************************************
-  * @file    stm32f3xx_hal_adc.h
-  * @author  MCD Application Team
-  * @brief   Header file containing functions prototypes of ADC HAL library.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2016 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    stm32f3xx_hal_adc.h
+ * @author  MCD Application Team
+ * @brief   Header file containing functions prototypes of ADC HAL library.
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2016 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F3xx_ADC_H
@@ -26,31 +26,31 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f3xx_hal_def.h"
-   
+
 /* Include ADC HAL Extended module */
 /* (include on top of file since ADC structures are defined in extended file) */
 #include "stm32f3xx_hal_adc_ex.h"
-   
+
 /** @addtogroup STM32F3xx_HAL_Driver
-  * @{
-  */
+ * @{
+ */
 
 /** @addtogroup ADC
-  * @{
-  */ 
+ * @{
+ */
 
 /* Exported types ------------------------------------------------------------*/
 /** @defgroup ADC_Exported_Types ADC Exported Types
-  * @{
-  */
+ * @{
+ */
 /** 
-  * @brief  HAL ADC state machine: ADC states definition (bitfields)
-  * @note   ADC state machine is managed by bitfields, state must be compared
-  *         with bit by bit.
-  *         For example:                                                         
-  *           " if (HAL_IS_BIT_SET(HAL_ADC_GetState(hadc1), HAL_ADC_STATE_REG_BUSY)) "
-  *           " if (HAL_IS_BIT_SET(HAL_ADC_GetState(hadc1), HAL_ADC_STATE_AWD1)    ) "
-  */
+ * @brief  HAL ADC state machine: ADC states definition (bitfields)
+ * @note   ADC state machine is managed by bitfields, state must be compared
+ *         with bit by bit.
+ *         For example:                                                         
+ *           " if (HAL_IS_BIT_SET(HAL_ADC_GetState(hadc1), HAL_ADC_STATE_REG_BUSY)) "
+ *           " if (HAL_IS_BIT_SET(HAL_ADC_GetState(hadc1), HAL_ADC_STATE_AWD1)    ) "
+ */
 /* States of ADC global scope */
 #define HAL_ADC_STATE_RESET             (0x00000000U)    /*!< ADC not yet initialized or disabled */
 #define HAL_ADC_STATE_READY             (0x00000001U)    /*!< ADC peripheral ready for use */
@@ -83,33 +83,31 @@
 /* States of ADC multi-mode */
 #define HAL_ADC_STATE_MULTIMODE_SLAVE   (0x00100000U)    /*!< ADC in multimode slave state, controlled by another ADC master ( */
 
-
 /** 
-  * @brief  ADC handle Structure definition  
-  */
-typedef struct __ADC_HandleTypeDef
-{
-  ADC_TypeDef                   *Instance;              /*!< Register base address */
+ * @brief  ADC handle Structure definition  
+ */
+typedef struct __ADC_HandleTypeDef {
+	ADC_TypeDef *Instance; /*!< Register base address */
 
-  ADC_InitTypeDef               Init;                   /*!< ADC required parameters */
+	ADC_InitTypeDef Init; /*!< ADC required parameters */
 
-  DMA_HandleTypeDef             *DMA_Handle;            /*!< Pointer DMA Handler */
+	DMA_HandleTypeDef *DMA_Handle; /*!< Pointer DMA Handler */
 
-  HAL_LockTypeDef               Lock;                   /*!< ADC locking object */
+	HAL_LockTypeDef Lock; /*!< ADC locking object */
 
-  __IO uint32_t                 State;                  /*!< ADC communication state (bitmap of ADC states) */
+	__IO uint32_t State; /*!< ADC communication state (bitmap of ADC states) */
 
-  __IO uint32_t                 ErrorCode;              /*!< ADC Error code */
-  
+	__IO uint32_t ErrorCode; /*!< ADC Error code */
+
 #if defined(STM32F302xE) || defined(STM32F303xE) || defined(STM32F398xx) || \
     defined(STM32F302xC) || defined(STM32F303xC) || defined(STM32F358xx) || \
     defined(STM32F303x8) || defined(STM32F334x8) || defined(STM32F328xx) || \
     defined(STM32F301x8) || defined(STM32F302x8) || defined(STM32F318xx)
-  ADC_InjectionConfigTypeDef    InjectionConfig ;       /*!< ADC injected channel configuration build-up structure */  
+	ADC_InjectionConfigTypeDef InjectionConfig; /*!< ADC injected channel configuration build-up structure */
 #endif /* STM32F302xE || STM32F303xE || STM32F398xx || */
-       /* STM32F302xC || STM32F303xC || STM32F358xx || */
-       /* STM32F303x8 || STM32F334x8 || STM32F328xx || */
-       /* STM32F301x8 || STM32F302x8 || STM32F318xx    */
+/* STM32F302xC || STM32F303xC || STM32F358xx || */
+/* STM32F303x8 || STM32F334x8 || STM32F328xx || */
+/* STM32F301x8 || STM32F302x8 || STM32F318xx    */
 
 #if (USE_HAL_ADC_REGISTER_CALLBACKS == 1)
   void (* ConvCpltCallback)(struct __ADC_HandleTypeDef *hadc);              /*!< ADC conversion complete callback */
@@ -120,7 +118,7 @@ typedef struct __ADC_HandleTypeDef
   void (* MspInitCallback)(struct __ADC_HandleTypeDef *hadc);               /*!< ADC Msp Init callback */
   void (* MspDeInitCallback)(struct __ADC_HandleTypeDef *hadc);             /*!< ADC Msp DeInit callback */
 #endif /* USE_HAL_ADC_REGISTER_CALLBACKS */
-}ADC_HandleTypeDef;
+} ADC_HandleTypeDef;
 
 #if (USE_HAL_ADC_REGISTER_CALLBACKS == 1)
 /**
@@ -145,19 +143,19 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
 #endif /* USE_HAL_ADC_REGISTER_CALLBACKS */
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /* Exported constants --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
-     
+
 /** @defgroup ADC_Exported_Macro ADC Exported Macros
-  * @{
-  */
+ * @{
+ */
 /** @brief  Reset ADC handle state
-  * @param  __HANDLE__ ADC handle
-  * @retval None
-  */
+ * @param  __HANDLE__ ADC handle
+ * @retval None
+ */
 #if (USE_HAL_ADC_REGISTER_CALLBACKS == 1)
 #define __HAL_ADC_RESET_HANDLE_STATE(__HANDLE__)                               \
   do{                                                                          \
@@ -171,24 +169,22 @@ typedef  void (*pADC_CallbackTypeDef)(ADC_HandleTypeDef *hadc); /*!< pointer to 
 #endif
 
 /**
-  * @}
-  */ 
-
-
+ * @}
+ */
 
 /* Exported functions --------------------------------------------------------*/
 /** @addtogroup ADC_Exported_Functions ADC Exported Functions
-  * @{
-  */ 
+ * @{
+ */
 
 /** @addtogroup ADC_Exported_Functions_Group1 Initialization and de-initialization functions 
  * @{
- */ 
+ */
 /* Initialization and de-initialization functions  **********************************/
-HAL_StatusTypeDef       HAL_ADC_Init(ADC_HandleTypeDef* hadc);
-HAL_StatusTypeDef       HAL_ADC_DeInit(ADC_HandleTypeDef *hadc);
-void                    HAL_ADC_MspInit(ADC_HandleTypeDef* hadc);
-void                    HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc);
+HAL_StatusTypeDef HAL_ADC_Init(ADC_HandleTypeDef *hadc);
+HAL_StatusTypeDef HAL_ADC_DeInit(ADC_HandleTypeDef *hadc);
+void HAL_ADC_MspInit(ADC_HandleTypeDef *hadc);
+void HAL_ADC_MspDeInit(ADC_HandleTypeDef *hadc);
 
 #if (USE_HAL_ADC_REGISTER_CALLBACKS == 1)
 /* Callbacks Register/UnRegister functions  ***********************************/
@@ -196,71 +192,76 @@ HAL_StatusTypeDef HAL_ADC_RegisterCallback(ADC_HandleTypeDef *hadc, HAL_ADC_Call
 HAL_StatusTypeDef HAL_ADC_UnRegisterCallback(ADC_HandleTypeDef *hadc, HAL_ADC_CallbackIDTypeDef CallbackID);
 #endif /* USE_HAL_ADC_REGISTER_CALLBACKS */
 /**
-  * @}
-  */
+ * @}
+ */
 
 /** @addtogroup ADC_Exported_Functions_Group2 Input and Output operation functions
  * @{
- */ 
+ */
 /* Blocking mode: Polling */
-HAL_StatusTypeDef       HAL_ADC_Start(ADC_HandleTypeDef* hadc);
-HAL_StatusTypeDef       HAL_ADC_Stop(ADC_HandleTypeDef* hadc);
-HAL_StatusTypeDef       HAL_ADC_PollForConversion(ADC_HandleTypeDef* hadc, uint32_t Timeout);
-HAL_StatusTypeDef       HAL_ADC_PollForEvent(ADC_HandleTypeDef* hadc, uint32_t EventType, uint32_t Timeout);
+HAL_StatusTypeDef HAL_ADC_Start(ADC_HandleTypeDef *hadc);
+HAL_StatusTypeDef HAL_ADC_Stop(ADC_HandleTypeDef *hadc);
+HAL_StatusTypeDef HAL_ADC_PollForConversion(ADC_HandleTypeDef *hadc,
+		uint32_t Timeout);
+HAL_StatusTypeDef HAL_ADC_PollForEvent(ADC_HandleTypeDef *hadc,
+		uint32_t EventType, uint32_t Timeout);
 
 /* Non-blocking mode: Interruption */
-HAL_StatusTypeDef       HAL_ADC_Start_IT(ADC_HandleTypeDef* hadc);
-HAL_StatusTypeDef       HAL_ADC_Stop_IT(ADC_HandleTypeDef* hadc);
+HAL_StatusTypeDef HAL_ADC_Start_IT(ADC_HandleTypeDef *hadc);
+HAL_StatusTypeDef HAL_ADC_Stop_IT(ADC_HandleTypeDef *hadc);
 
 /* Non-blocking mode: DMA */
-HAL_StatusTypeDef       HAL_ADC_Start_DMA(ADC_HandleTypeDef* hadc, uint32_t* pData, uint32_t Length);
-HAL_StatusTypeDef       HAL_ADC_Stop_DMA(ADC_HandleTypeDef* hadc);
+HAL_StatusTypeDef HAL_ADC_Start_DMA(ADC_HandleTypeDef *hadc, uint32_t *pData,
+		uint32_t Length);
+HAL_StatusTypeDef HAL_ADC_Stop_DMA(ADC_HandleTypeDef *hadc);
 
 /* ADC retrieve conversion value intended to be used with polling or interruption */
-uint32_t                HAL_ADC_GetValue(ADC_HandleTypeDef* hadc);
+uint32_t HAL_ADC_GetValue(ADC_HandleTypeDef *hadc);
 
 /* ADC IRQHandler and Callbacks used in non-blocking modes (Interruption and DMA) */
-void                    HAL_ADC_IRQHandler(ADC_HandleTypeDef* hadc);
-void                    HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc);
-void                    HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc);
-void                    HAL_ADC_LevelOutOfWindowCallback(ADC_HandleTypeDef* hadc);
-void                    HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc);
+void HAL_ADC_IRQHandler(ADC_HandleTypeDef *hadc);
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc);
+void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc);
+void HAL_ADC_LevelOutOfWindowCallback(ADC_HandleTypeDef *hadc);
+void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc);
 /**
-  * @}
-  */
+ * @}
+ */
 
 /** @addtogroup ADC_Exported_Functions_Group3 Peripheral Control functions
  * @{
- */ 
+ */
 /* Peripheral Control functions ***********************************************/
-HAL_StatusTypeDef       HAL_ADC_ConfigChannel(ADC_HandleTypeDef* hadc, ADC_ChannelConfTypeDef* sConfig);
-HAL_StatusTypeDef       HAL_ADC_AnalogWDGConfig(ADC_HandleTypeDef* hadc, ADC_AnalogWDGConfTypeDef* AnalogWDGConfig);
+HAL_StatusTypeDef HAL_ADC_ConfigChannel(ADC_HandleTypeDef *hadc,
+		ADC_ChannelConfTypeDef *sConfig);
+HAL_StatusTypeDef HAL_ADC_AnalogWDGConfig(ADC_HandleTypeDef *hadc,
+		ADC_AnalogWDGConfTypeDef *AnalogWDGConfig);
 /**
-  * @}
-  */
+ * @}
+ */
 
 /** @defgroup ADC_Exported_Functions_Group4 Peripheral State functions
  *  @brief   ADC Peripheral State functions 
  * @{
- */ 
+ */
 /* Peripheral State functions *************************************************/
-uint32_t                HAL_ADC_GetState(ADC_HandleTypeDef* hadc);
-uint32_t                HAL_ADC_GetError(ADC_HandleTypeDef *hadc);
+uint32_t HAL_ADC_GetState(ADC_HandleTypeDef *hadc);
+uint32_t HAL_ADC_GetError(ADC_HandleTypeDef *hadc);
 /**
-  * @}
-  */
+ * @}
+ */
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 /**
-  * @}
-  */ 
+ * @}
+ */
 
 /**
-  * @}
-  */
+ * @}
+ */
 
 #ifdef __cplusplus
 }
