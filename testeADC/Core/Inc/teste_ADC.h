@@ -17,4 +17,4 @@ void ADC_Calibration(ADC_HandleTypeDef* hadc, uint32_t SingleDiff);
 HAL_StatusTypeDef ADC_Start(ADC_HandleTypeDef* hadc);
 HAL_StatusTypeDef ADC_PollForConversion(ADC_HandleTypeDef *hadc, uint32_t Timeout);
 uint32_t ADC_GetValue(ADC_HandleTypeDef* hadc);
-void teste_ADC(ADC_HandleTypeDef* hadc);
+uint32_t teste_ADC(ADC_HandleTypeDef* hadc);
