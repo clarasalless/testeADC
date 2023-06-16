@@ -253,26 +253,6 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-/*uint32_t teste_adc() {
-	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
-	status = HAL_ADC_Start(&hadc1);
-	if (status != HAL_OK) {
-		Error_Handler();
-	}
-	status = HAL_ADC_PollForConversion(&hadc1, 100);
-
-	if (status != HAL_OK) {
-		Error_Handler();
-	}
-<<<<<<< Updated upstream
-	adc_value = HAL_ADC_GetValue(&hadc1);
-
-	return adc_value;
-}
-=======
-	return HAL_ADC_GetValue(&hadc1);
-}*/
-
 /* USER CODE END 4 */
 
 /**
