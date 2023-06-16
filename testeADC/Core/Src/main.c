@@ -108,7 +108,13 @@ int main(void)
 	  }
   }
     /* USER CODE END WHILE */
-
+	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_Pin_15)==1 && status==0){
+		  status=1;
+		  adc_value = teste_adc();
+	  }
+	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_Pin_15)==0 && status==1){
+		  status=0;
+	  }
     /* USER CODE BEGIN 3 */
 
   /* USER CODE END 3 */
