@@ -110,15 +110,15 @@ int main(void)
 		  btn_action = btn_state;
 	  }
 
-	  if (btn_action == 0 && button_status == 0)
+	  if (btn_action == 0 && btn_lock == 0)
 	  {
-		  button_lock = 1;
+		  btn_lock = 1;
 		  tensao_media = teste_ADC(&hadc1);
 	  }
 
-	  if (btn_action == 1 && button_status == 1)
+	  if (btn_action == 1 && btn_lock == 1)
 	  {
-		  button_lock = 0;
+		  btn_lock = 0;
 	  }
 	  btn_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
   }
