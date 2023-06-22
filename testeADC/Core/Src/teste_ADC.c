@@ -82,6 +82,15 @@ GPIO_PinState GPIO_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 }
 
 /**
+  * @brief  Retorna um valor de tick em milisegundos.
+  * @retval tick value
+  */
+uint32_t GetTick(void)
+{
+	return HAL_GetTick();
+}
+
+/**
   * @brief  Inicializa canal do ADC especificado para a realização do teste.
   * @param  hadc ADC handle
   * @param  ADC_CHANNEL Canal a ser inicializado
