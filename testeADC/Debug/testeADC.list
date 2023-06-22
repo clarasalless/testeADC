@@ -29,23 +29,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  12 .ARM.attributes 00000030  00000000  00000000  0002000c  2**0
                   CONTENTS, READONLY
- 13 .debug_info   00007db2  00000000  00000000  0002003c  2**0
+ 13 .debug_info   00007e2e  00000000  00000000  0002003c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_abbrev 00001642  00000000  00000000  00027dee  2**0
+ 14 .debug_abbrev 00001642  00000000  00000000  00027e6a  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_aranges 00000600  00000000  00000000  00029430  2**3
+ 15 .debug_aranges 00000608  00000000  00000000  000294b0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_ranges 00000548  00000000  00000000  00029a30  2**3
+ 16 .debug_ranges 00000550  00000000  00000000  00029ab8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_macro  0001f637  00000000  00000000  00029f78  2**0
+ 17 .debug_macro  0001f637  00000000  00000000  0002a008  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   00009255  00000000  00000000  000495af  2**0
+ 18 .debug_line   000092f8  00000000  00000000  0004963f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000c4221  00000000  00000000  00052804  2**0
+ 19 .debug_str    000c4262  00000000  00000000  00052937  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .comment      00000050  00000000  00000000  00116a25  2**0
+ 20 .comment      00000050  00000000  00000000  00116b99  2**0
                   CONTENTS, READONLY
- 21 .debug_frame  00001688  00000000  00000000  00116a78  2**2
+ 21 .debug_frame  000016ac  00000000  00000000  00116bec  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -908,10 +908,10 @@ void SystemInit(void) {
  80005d0:	e000ed00 	.word	0xe000ed00
 
 080005d4 <ADC_Calibration>:
-{
-	HAL_ADC_DeInit(hadc);
-}
-
+  *            @arg ADC_SINGLE_ENDED: Canal em modo de single ended
+  *            @arg ADC_DIFFERENTIAL_ENDED: Canal em modo differential ended
+  * @retval HAL status
+  */
 void ADC_Calibration(ADC_HandleTypeDef* hadc, uint32_t SingleDiff)
 {
  80005d4:	b580      	push	{r7, lr}
@@ -930,7 +930,10 @@ void ADC_Calibration(ADC_HandleTypeDef* hadc, uint32_t SingleDiff)
  80005ec:	bd80      	pop	{r7, pc}
 
 080005ee <ADC_Start>:
-
+  * @brief  Inicia o ADC e começa a conversão.
+  * @param  hadc ADC handle
+  * @retval HAL status
+  */
 HAL_StatusTypeDef ADC_Start(ADC_HandleTypeDef* hadc)
 {
  80005ee:	b580      	push	{r7, lr}
@@ -948,7 +951,10 @@ HAL_StatusTypeDef ADC_Start(ADC_HandleTypeDef* hadc)
  8000604:	bd80      	pop	{r7, pc}
 
 08000606 <ADC_PollForConversion>:
-
+  * @param  hadc ADC handle
+  * @param  Timeout Valor do tempo de espera em milisegundos
+  * @retval HAL status
+  */
 HAL_StatusTypeDef ADC_PollForConversion(ADC_HandleTypeDef *hadc, uint32_t Timeout)
 {
  8000606:	b580      	push	{r7, lr}
@@ -968,7 +974,10 @@ HAL_StatusTypeDef ADC_PollForConversion(ADC_HandleTypeDef *hadc, uint32_t Timeou
  8000620:	bd80      	pop	{r7, pc}
 
 08000622 <ADC_GetValue>:
-
+  * @brief  Recebe o valor do ADC após conversão.
+  * @param  hadc ADC handle
+  * @retval Valor convertido
+  */
 uint32_t ADC_GetValue(ADC_HandleTypeDef* hadc)
 {
  8000622:	b580      	push	{r7, lr}
@@ -1086,108 +1095,48 @@ uint32_t teste_ADC(ADC_HandleTypeDef* hadc)
  80006e0:	ccd99a67 	.word	0xccd99a67
 
 080006e4 <Reset_Handler>:
-
-    .section	.text.Reset_Handler
-	.weak	Reset_Handler
-	.type	Reset_Handler, %function
-Reset_Handler:
-  ldr   sp, =_estack    /* Atollic update: set stack pointer */
  80006e4:	f8df d034 	ldr.w	sp, [pc, #52]	; 800071c <LoopForever+0x2>
-  
-/* Call the clock system initialization function.*/
-    bl  SystemInit
  80006e8:	f7ff ff62 	bl	80005b0 <SystemInit>
-
-/* Copy the data segment initializers from flash to SRAM */
-  ldr r0, =_sdata
  80006ec:	480c      	ldr	r0, [pc, #48]	; (8000720 <LoopForever+0x6>)
-  ldr r1, =_edata
  80006ee:	490d      	ldr	r1, [pc, #52]	; (8000724 <LoopForever+0xa>)
-  ldr r2, =_sidata
  80006f0:	4a0d      	ldr	r2, [pc, #52]	; (8000728 <LoopForever+0xe>)
-  movs r3, #0
  80006f2:	2300      	movs	r3, #0
-  b LoopCopyDataInit
  80006f4:	e002      	b.n	80006fc <LoopCopyDataInit>
 
 080006f6 <CopyDataInit>:
-
-CopyDataInit:
-  ldr r4, [r2, r3]
  80006f6:	58d4      	ldr	r4, [r2, r3]
-  str r4, [r0, r3]
  80006f8:	50c4      	str	r4, [r0, r3]
-  adds r3, r3, #4
  80006fa:	3304      	adds	r3, #4
 
 080006fc <LoopCopyDataInit>:
-
-LoopCopyDataInit:
-  adds r4, r0, r3
  80006fc:	18c4      	adds	r4, r0, r3
-  cmp r4, r1
  80006fe:	428c      	cmp	r4, r1
-  bcc CopyDataInit
  8000700:	d3f9      	bcc.n	80006f6 <CopyDataInit>
-  
-/* Zero fill the bss segment. */
-  ldr r2, =_sbss
  8000702:	4a0a      	ldr	r2, [pc, #40]	; (800072c <LoopForever+0x12>)
-  ldr r4, =_ebss
  8000704:	4c0a      	ldr	r4, [pc, #40]	; (8000730 <LoopForever+0x16>)
-  movs r3, #0
  8000706:	2300      	movs	r3, #0
-  b LoopFillZerobss
  8000708:	e001      	b.n	800070e <LoopFillZerobss>
 
 0800070a <FillZerobss>:
-
-FillZerobss:
-  str  r3, [r2]
  800070a:	6013      	str	r3, [r2, #0]
-  adds r2, r2, #4
  800070c:	3204      	adds	r2, #4
 
 0800070e <LoopFillZerobss>:
-
-LoopFillZerobss:
-  cmp r2, r4
  800070e:	42a2      	cmp	r2, r4
-  bcc FillZerobss
  8000710:	d3fb      	bcc.n	800070a <FillZerobss>
-
-/* Call static constructors */
-    bl __libc_init_array
  8000712:	f003 f891 	bl	8003838 <__libc_init_array>
-/* Call the application's entry point.*/
-	bl	main
  8000716:	f7ff fd5d 	bl	80001d4 <main>
 
 0800071a <LoopForever>:
-
-LoopForever:
-    b LoopForever
  800071a:	e7fe      	b.n	800071a <LoopForever>
-  ldr   sp, =_estack    /* Atollic update: set stack pointer */
  800071c:	20010000 	.word	0x20010000
-  ldr r0, =_sdata
  8000720:	20000000 	.word	0x20000000
-  ldr r1, =_edata
  8000724:	2000000c 	.word	0x2000000c
-  ldr r2, =_sidata
  8000728:	080038e0 	.word	0x080038e0
-  ldr r2, =_sbss
  800072c:	2000000c 	.word	0x2000000c
-  ldr r4, =_ebss
  8000730:	20000088 	.word	0x20000088
 
 08000734 <ADC1_2_IRQHandler>:
- * @retval : None
-*/
-    .section	.text.Default_Handler,"ax",%progbits
-Default_Handler:
-Infinite_Loop:
-	b	Infinite_Loop
  8000734:	e7fe      	b.n	8000734 <ADC1_2_IRQHandler>
 	...
 

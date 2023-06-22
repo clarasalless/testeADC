@@ -1,8 +1,26 @@
+/**
+  ******************************************************************************
+  * @file    teste_ADC.c
+  * @author  Clara Luz Salles Cavalcante
+  * 		 Danilo Mota Alencar Filho
+  * @brief   O objetivo deste arquivo é testar a funcionalidade
+  * 		 do conversor analógico digital do dispositivo.
+  *
+  ******************************************************************************/
+
+
+
+/* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
 #include "stm32f3xx_hal.h"
 
 HAL_StatusTypeDef status;
 
+/**
+  * @brief  Inicializa o clock do GPIOx especificado.
+  * @param  GPIOx, onde x pode ser (A..F), para selecionar qual GPIO será utilizado.
+  * @retval None
+  */
 void CLKEnable(GPIO_TypeDef* GPIOx)
 {
 	if(GPIOx == GPIOA)
@@ -17,6 +35,12 @@ void CLKEnable(GPIO_TypeDef* GPIOx)
 		__HAL_RCC_GPIOF_CLK_ENABLE();
 }
 
+/**
+  * @brief  Inicializa GPIOx especificado para ser utilizado como botão no teste.
+  * @param  GPIOx, onde x pode ser (A..F), para selecionar qual GPIO será utilizado.
+  * @param  GPIO_Pin especifica o pino a ser inicializado.
+  * @retval None
+  */
 void buttonInit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -24,7 +48,7 @@ void buttonInit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 	/* GPIO Port Clock Enable */
 	CLKEnable(GPIOx);
 
-	/*Configure GPIO pin : PC13 */
+	/*Configure GPIO pin : */
 	GPIO_InitStruct.Pin = GPIO_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -35,11 +59,34 @@ void buttonInit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
 
+/**
+  * @brief  Deinicializa o pino do GPIO especificado.
+  * @param  GPIOx, onde x pode ser (A..F), para selecionar qual GPIO será utilizado.
+  * @param  GPIO_Pin especifica o pino a ser deinicializado.
+  * @retval None
+  */
 void buttonDeInit(GPIO_TypeDef  *GPIOx, uint32_t GPIO_Pin)
 {
 	HAL_GPIO_DeInit(GPIOx,GPIO_Pin);
 }
 
+/**
+  * @brief  Lê o valor de entrada do pino da porta especificada.
+  * @param  GPIOx, onde x pode ser (A..F), para selecionar qual GPIO será utilizado.
+  * @param  GPIO_Pin especifica o pino a ser lido.
+  * @retval O valor do pino da porta especificada.
+  */
+GPIO_PinState GPIO_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
+{
+	return HAL_GPIO_ReadPin(GPIOx, GPIO_Pin);
+}
+
+/**
+  * @brief  Inicializa canal do ADC especificado para a realização do teste.
+  * @param  hadc ADC handle
+  * @param  ADC_CHANNEL Canal a ser inicializado
+  * @retval HAL status
+  */
 void ADC_Init(ADC_HandleTypeDef hadc, uint32_t ADC_CHANNEL)
 {
 	ADC_MultiModeTypeDef multimode = {0};
@@ -88,26 +135,58 @@ void ADC_Init(ADC_HandleTypeDef hadc, uint32_t ADC_CHANNEL)
 	}
 }
 
+/**
+  * @brief  Deinicializa o ADC especificado.
+  * @param  hadc ADC handle.
+  * @retval None
+  */
 void ADC_DeInit(ADC_HandleTypeDef* hadc)
 {
 	HAL_ADC_DeInit(hadc);
 }
 
+/**
+  * @brief  Realiza auto-calibração do ADC
+  *         Pre-requisito: ADC precisa estar desativado (executar esta função antes de
+  *         ADC_Start() ou depois de ADC_Stop()).
+  * @param  hadc ADC handle
+  * @param  SingleDiff Seleção de modo de entrada single-ended ou differential input
+  *          Este parâmetro pode assumir um dos seguintes valores:
+  *            @arg ADC_SINGLE_ENDED: Canal em modo de single ended
+  *            @arg ADC_DIFFERENTIAL_ENDED: Canal em modo differential ended
+  * @retval HAL status
+  */
 void ADC_Calibration(ADC_HandleTypeDef* hadc, uint32_t SingleDiff)
 {
 	HAL_ADCEx_Calibration_Start(hadc, SingleDiff);
 }
 
+/**
+  * @brief  Inicia o ADC e começa a conversão.
+  * @param  hadc ADC handle
+  * @retval HAL status
+  */
 HAL_StatusTypeDef ADC_Start(ADC_HandleTypeDef* hadc)
 {
 	return HAL_ADC_Start(hadc);
 }
 
+/**
+  * @brief  Espera as conversões serem concluidas.
+  * @param  hadc ADC handle
+  * @param  Timeout Valor do tempo de espera em milisegundos
+  * @retval HAL status
+  */
 HAL_StatusTypeDef ADC_PollForConversion(ADC_HandleTypeDef *hadc, uint32_t Timeout)
 {
 	return HAL_ADC_PollForConversion(hadc, Timeout);
 }
 
+/**
+  * @brief  Recebe o valor do ADC após conversão.
+  * @param  hadc ADC handle
+  * @retval Valor convertido
+  */
 uint32_t ADC_GetValue(ADC_HandleTypeDef* hadc)
 {
 	return HAL_ADC_GetValue(hadc);
