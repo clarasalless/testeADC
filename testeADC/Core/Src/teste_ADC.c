@@ -203,7 +203,6 @@ uint32_t ADC_GetValue(ADC_HandleTypeDef* hadc)
 
 uint32_t teste_ADC(ADC_HandleTypeDef* hadc)
 {
-	ADC_Calibration(hadc, ADC_SINGLE_ENDED);
 	status = ADC_Start(hadc);
 	uint32_t avrg_value = 0;
 	uint32_t adc_values[10];
