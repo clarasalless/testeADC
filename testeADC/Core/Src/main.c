@@ -43,8 +43,14 @@
 ADC_HandleTypeDef hadc1;
 
 /* USER CODE BEGIN PV */
+int btn_lock=0;
 uint32_t tensao_media;
-int button_status=0;
+uint32_t delay;
+uint32_t tick;
+GPIO_PinState currentBtnState;
+GPIO_PinState previousBtnState;
+GPIO_PinState btn_action;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -90,22 +96,39 @@ int main(void)
   MX_GPIO_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-
+  tick = HAL_GetTick();
+  currentBtnState = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
+  btn_action = currentBtnState;
+  delay = 1000;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == 0 && button_status == 0)
+	  currentBtnState = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
+
+	  if(currentBtnState!=previousBtnState)
 	  {
-		  button_status = 1;
+		  tick = HAL_GetTick();
+	  }
+
+	  if((HAL_GetTick() - tick) > delay)
+	  {
+		  btn_action = currentBtnState;
+	  }
+
+	  if (btn_action == 0 && btn_lock == 0)
+	  {
+		  btn_lock = 1;
 		  tensao_media = teste_ADC(&hadc1);
 	  }
-	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == 1 && button_status == 1)
+
+	  if (btn_action == 1 && btn_lock == 1)
 	  {
-		  button_status = 0;
+		  btn_lock = 0;
 	  }
+	  previousBtnState = currentBtnState;
   }
     /* USER CODE END WHILE */
 
