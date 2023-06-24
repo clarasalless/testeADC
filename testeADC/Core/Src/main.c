@@ -94,10 +94,11 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-  //MX_GPIO_Init();
+//  MX_GPIO_Init();
   buttonInit(GPIOC, GPIO_PIN_13);
-//  MX_ADC1_Init();
-  ADC_Init(&hadc1);
+  //MX_ADC1_Init();
+  hadc1 = ADC_HandleConfiguration(hadc1);
+  ADC_Init2(hadc1,ADC1,ADC_CHANNEL_1);
   ADC_Calibration(&hadc1, ADC_SINGLE_ENDED);
   /* USER CODE BEGIN 2 */
   tick = HAL_GetTick();

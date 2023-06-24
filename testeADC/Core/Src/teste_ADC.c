@@ -14,7 +14,9 @@
 #include <stdio.h>
 #include "stm32f3xx_hal.h"
 
+
 HAL_StatusTypeDef status;
+ADC_HandleTypeDef hadc;
 
 /**
   * @brief  Inicializa o clock do GPIOx especificado.
@@ -95,7 +97,7 @@ uint32_t GetTick(void)
 void ADC_Init(ADC_HandleTypeDef hadc)
 {
 	 /* USER CODE BEGIN ADC1_Init 0 */
-
+	//ADC_HandleTypeDef hadc;
 	  /* USER CODE END ADC1_Init 0 */
 
 	  ADC_MultiModeTypeDef multimode = {0};
@@ -143,6 +145,87 @@ void ADC_Init(ADC_HandleTypeDef hadc)
 	  sConfig.OffsetNumber = ADC_OFFSET_NONE;
 	  sConfig.Offset = 0;
 	  if (HAL_ADC_ConfigChannel(&hadc, &sConfig) != HAL_OK)
+	  {
+	    Error_Handler();
+	  }
+	  /* USER CODE BEGIN ADC1_Init 2 */
+
+	  /* USER CODE END ADC1_Init 2 */
+
+}
+
+ADC_HandleTypeDef ADC_HandleConfiguration(ADC_HandleTypeDef hadc_origin)
+{
+	hadc_origin.Instance = ADC1;
+	hadc_origin.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
+	hadc_origin.Init.Resolution = ADC_RESOLUTION_12B;
+	hadc_origin.Init.ScanConvMode = ADC_SCAN_DISABLE;
+	hadc_origin.Init.ContinuousConvMode = DISABLE;
+	hadc_origin.Init.DiscontinuousConvMode = DISABLE;
+	hadc_origin.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+	hadc_origin.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+	hadc_origin.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+	hadc_origin.Init.NbrOfConversion = 1;
+	hadc_origin.Init.DMAContinuousRequests = DISABLE;
+	hadc_origin.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+	hadc_origin.Init.LowPowerAutoWait = DISABLE;
+	hadc_origin.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
+
+	return hadc_origin;
+
+}
+
+void ADC_Init2(ADC_HandleTypeDef hadc_origin,ADC_TypeDef* ADC, uint32_t ADC_CHANNEL)
+{
+	 /* USER CODE BEGIN ADC1_Init 0 */
+		//hadc = ADC_HandleConfiguration(hadc_origin);
+	  /* USER CODE END ADC1_Init 0 */
+
+	  ADC_MultiModeTypeDef multimode = {0};
+	  ADC_ChannelConfTypeDef sConfig = {0};
+
+	  /* USER CODE BEGIN ADC1_Init 1 */
+
+	  /* USER CODE END ADC1_Init 1 */
+
+	  /** Common config
+	  */
+//	  hadc.Instance = ADC;
+//	  hadc.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
+//	  hadc.Init.Resolution = ADC_RESOLUTION_12B;
+//	  hadc.Init.ScanConvMode = ADC_SCAN_DISABLE;
+//	  hadc.Init.ContinuousConvMode = DISABLE;
+//	  hadc.Init.DiscontinuousConvMode = DISABLE;
+//	  hadc.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+//	  hadc.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+//	  hadc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+//	  hadc.Init.NbrOfConversion = 1;
+//	  hadc.Init.DMAContinuousRequests = DISABLE;
+//	  hadc.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+//	  hadc.Init.LowPowerAutoWait = DISABLE;
+//	  hadc.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
+	  if (HAL_ADC_Init(&hadc_origin) != HAL_OK)
+	  {
+	    Error_Handler();
+	  }
+
+	  /** Configure the ADC multi-mode
+	  */
+	  multimode.Mode = ADC_MODE_INDEPENDENT;
+	  if (HAL_ADCEx_MultiModeConfigChannel(&hadc_origin, &multimode) != HAL_OK)
+	  {
+	    Error_Handler();
+	  }
+
+	  /** Configure Regular Channel
+	  */
+	  sConfig.Channel = ADC_CHANNEL;
+	  sConfig.Rank = ADC_REGULAR_RANK_1;
+	  sConfig.SingleDiff = ADC_SINGLE_ENDED;
+	  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+	  sConfig.OffsetNumber = ADC_OFFSET_NONE;
+	  sConfig.Offset = 0;
+	  if (HAL_ADC_ConfigChannel(&hadc_origin, &sConfig) != HAL_OK)
 	  {
 	    Error_Handler();
 	  }
