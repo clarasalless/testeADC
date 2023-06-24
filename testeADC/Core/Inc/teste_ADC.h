@@ -13,7 +13,7 @@ void buttonInit(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 void buttonDeInit(GPIO_TypeDef  *GPIOx, uint32_t GPIO_Pin);
 GPIO_PinState GPIO_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 uint32_t GetTick(void);
-void ADC_Init(ADC_HandleTypeDef hadc, uint32_t ADC_CHANNEL);
+void ADC_Init(ADC_HandleTypeDef* hadc);
 void ADC_DeInit(ADC_HandleTypeDef* hadc);
 void ADC_Calibration(ADC_HandleTypeDef* hadc, uint32_t SingleDiff);
 HAL_StatusTypeDef ADC_Start(ADC_HandleTypeDef* hadc);
