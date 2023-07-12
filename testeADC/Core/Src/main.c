@@ -44,6 +44,7 @@ ADC_HandleTypeDef hadc1;
 
 /* USER CODE BEGIN PV */
 int btn_lock=0;
+uint32_t adc_values[10];
 uint32_t tensao_media;
 uint32_t delay;
 uint32_t tick;
@@ -82,8 +83,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  //CLKEnable(GPIOC);
-  //buttonInit(GPIOC, GPIO_PIN_13);
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -94,13 +94,12 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-//  MX_GPIO_Init();
-  buttonInit(GPIOC, GPIO_PIN_13);
-  //MX_ADC1_Init();
-  hadc1 = ADC_HandleConfiguration(hadc1);
-  ADC_Init2(hadc1,ADC1,ADC_CHANNEL_1);
-  ADC_Calibration(&hadc1, ADC_SINGLE_ENDED);
+
+
   /* USER CODE BEGIN 2 */
+  buttonInit(GPIOC, GPIO_PIN_13);
+  ADC_Init(&hadc1, ADC1, ADC_CHANNEL_1);
+  ADC_Calibration(&hadc1, ADC_SINGLE_ENDED);
   tick = HAL_GetTick();
   currentBtnState = GPIO_ReadPin(GPIOC, GPIO_PIN_13);
   btn_action = currentBtnState;
@@ -126,7 +125,7 @@ int main(void)
 	  if (btn_action == 0 && btn_lock == 0)
 	  {
 		  btn_lock = 1;
-		  tensao_media = teste_ADC(&hadc1);
+		  tensao_media = teste_ADC(&hadc1, adc_values, sizeof(adc_values)/sizeof(uint32_t));
 	  }
 
 	  if (btn_action == 1 && btn_lock == 1)
